@@ -1,0 +1,782 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student List | Dashboard</title>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <style>
+    /* ===== VARIABLES ===== */
+:root {
+    --primary-color: #4361ee;
+    --primary-dark: #3a56d4;
+    --secondary-color: #6c757d;
+    --success-color: #2ecc71;
+    --danger-color: #e74c3c;
+    --warning-color: #f39c12;
+    --info-color: #3498db;
+    --light-bg: #f8f9fa;
+    --dark-bg: #343a40;
+    --text-dark: #2c3e50;
+    --text-light: #7f8c8d;
+    --border-color: #e9ecef;
+    --box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    --hover-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    --transition: all 0.3s ease;
+    --border-radius: 10px;
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ===== GLOBAL STYLES ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 40px 20px;
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+/* ===== MAIN CONTAINER ===== */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--hover-shadow);
+    overflow: hidden;
+    animation: slideInUp 0.5s ease;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== HEADER SECTION ===== */
+.header {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #3a56d4 100%);
+    padding: 30px 30px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.header h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.header h2 i {
+    font-size: 2rem;
+    color: rgba(255,255,255,0.9);
+}
+
+.header-actions {
+    display: flex;
+    gap: 15px;
+}
+
+/* ===== BUTTON STYLES ===== */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: var(--transition);
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.btn i {
+    font-size: 1.1rem;
+}
+
+.btn-primary {
+    background: white;
+    color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background: rgba(255,255,255,0.9);
+    transform: translateY(-2px);
+    box-shadow: var(--hover-shadow);
+}
+
+.btn-add {
+    background: var(--success-color);
+    color: white;
+}
+
+.btn-add:hover {
+    background: #27ae60;
+    transform: translateY(-2px);
+    box-shadow: var(--hover-shadow);
+}
+
+.btn-edit {
+    background: var(--warning-color);
+    color: white;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    margin-right: 8px;
+}
+
+.btn-edit:hover {
+    background: #e67e22;
+    transform: translateY(-2px);
+}
+
+.btn-delete {
+    background: var(--danger-color);
+    color: white;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+}
+
+.btn-delete:hover {
+    background: #c0392b;
+    transform: translateY(-2px);
+}
+
+/* ===== TABLE CONTAINER ===== */
+.table-container {
+    padding: 30px;
+    overflow-x: auto;
+}
+
+/* ===== TABLE STYLES ===== */
+.student-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--box-shadow);
+    background: white;
+}
+
+.student-table thead {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #3a56d4 100%);
+    color: white;
+}
+
+.student-table th {
+    padding: 15px 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.9rem;
+    text-align: left;
+    border: none;
+}
+
+.student-table td {
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-dark);
+    vertical-align: middle;
+}
+
+.student-table tbody tr {
+    transition: var(--transition);
+}
+
+.student-table tbody tr:hover {
+    background-color: var(--light-bg);
+    transform: scale(1.01);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.student-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* ===== SERIAL NUMBER BADGE ===== */
+.sr-badge {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    background: linear-gradient(135deg, var(--primary-color) 0%, #3a56d4 100%);
+    color: white;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 30px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* ===== STUDENT INFO STYLES ===== */
+.student-name {
+    font-weight: 600;
+    color: var(--text-dark);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.student-name i {
+    color: var(--primary-color);
+    font-size: 1.2rem;
+}
+
+.student-age {
+    background: rgba(52, 152, 219, 0.1);
+    color: var(--info-color);
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.student-email {
+    color: var(--text-light);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.student-email i {
+    color: var(--info-color);
+    font-size: 0.9rem;
+}
+
+.student-contact {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--text-dark);
+}
+
+.student-contact i {
+    color: var(--success-color);
+    font-size: 0.9rem;
+}
+
+/* ===== ACTION BUTTONS CONTAINER ===== */
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* ===== EMPTY STATE STYLES ===== */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    background: var(--light-bg);
+    border-radius: var(--border-radius);
+}
+
+.empty-state i {
+    font-size: 5rem;
+    color: var(--text-light);
+    margin-bottom: 20px;
+    opacity: 0.5;
+}
+
+.empty-state p {
+    font-size: 1.3rem;
+    color: var(--text-dark);
+    margin-bottom: 25px;
+    font-weight: 500;
+}
+
+.empty-state .btn {
+    display: inline-flex;
+    background: var(--primary-color);
+    color: white;
+    padding: 14px 35px;
+    font-size: 1.1rem;
+}
+
+.empty-state .btn:hover {
+    background: var(--primary-dark);
+}
+
+/* ===== NO STUDENTS FOUND ROW ===== */
+.no-students {
+    text-align: center;
+    padding: 40px !important;
+    color: var(--text-light);
+    font-size: 1.1rem;
+}
+
+.no-students td {
+    text-align: center;
+    background: var(--light-bg);
+}
+
+/* ===== FOOTER SECTION ===== */
+.table-footer {
+    padding: 20px 30px;
+    background: var(--light-bg);
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.student-count {
+    color: var(--text-light);
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.student-count i {
+    color: var(--primary-color);
+}
+
+.student-count span {
+    color: var(--primary-color);
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+/* ===== PAGINATION (if needed) ===== */
+.pagination {
+    display: flex;
+    gap: 8px;
+}
+
+.page-item {
+    list-style: none;
+}
+
+.page-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: white;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-dark);
+    text-decoration: none;
+    transition: var(--transition);
+    font-weight: 600;
+}
+
+.page-link:hover,
+.page-link.active {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* ===== SEARCH BAR (optional add-on) ===== */
+.search-bar {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 15px 20px 15px 50px;
+    border: 2px solid var(--border-color);
+    border-radius: 50px;
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+.search-bar input:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+}
+
+.search-bar i {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-light);
+    font-size: 1.2rem;
+}
+
+/* ===== FILTER CHIPS (optional add-on) ===== */
+.filter-chips {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.chip {
+    padding: 8px 20px;
+    background: white;
+    border: 2px solid var(--border-color);
+    border-radius: 50px;
+    color: var(--text-dark);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.chip i {
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+.chip:hover,
+.chip.active {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+.chip:hover i,
+.chip.active i {
+    color: white;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 992px) {
+    .header {
+        padding: 20px;
+    }
+    
+    .header h2 {
+        font-size: 1.8rem;
+    }
+    
+    .table-container {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 20px 10px;
+    }
+    
+    .header {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .header h2 {
+        font-size: 1.5rem;
+    }
+    
+    .header-actions {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .student-table th {
+        padding: 12px 15px;
+        font-size: 0.8rem;
+    }
+    
+    .student-table td {
+        padding: 12px 15px;
+        font-size: 0.9rem;
+    }
+    
+    .btn-edit,
+    .btn-delete {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .table-footer {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+@media (max-width: 576px) {
+    .student-table {
+        font-size: 0.85rem;
+    }
+    
+    .student-table th,
+    .student-table td {
+        padding: 10px;
+    }
+    
+    .sr-badge {
+        width: 25px;
+        height: 25px;
+        line-height: 25px;
+        font-size: 0.8rem;
+    }
+    
+    .btn {
+        padding: 8px 16px;
+        font-size: 0.85rem;
+    }
+    
+    .empty-state i {
+        font-size: 3.5rem;
+    }
+    
+    .empty-state p {
+        font-size: 1.1rem;
+    }
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.student-table tbody tr {
+    animation: fadeIn 0.5s ease;
+    animation-fill-mode: both;
+}
+
+.student-table tbody tr:nth-child(1) { animation-delay: 0.1s; }
+.student-table tbody tr:nth-child(2) { animation-delay: 0.2s; }
+.student-table tbody tr:nth-child(3) { animation-delay: 0.3s; }
+.student-table tbody tr:nth-child(4) { animation-delay: 0.4s; }
+.student-table tbody tr:nth-child(5) { animation-delay: 0.5s; }
+.student-table tbody tr:nth-child(6) { animation-delay: 0.6s; }
+.student-table tbody tr:nth-child(7) { animation-delay: 0.7s; }
+.student-table tbody tr:nth-child(8) { animation-delay: 0.8s; }
+.student-table tbody tr:nth-child(9) { animation-delay: 0.9s; }
+.student-table tbody tr:nth-child(10) { animation-delay: 1s; }
+
+/* ===== PRINT STYLES ===== */
+@media print {
+    body {
+        background: white;
+        padding: 0;
+    }
+    
+    .container {
+        box-shadow: none;
+    }
+    
+    .header,
+    .btn,
+    .table-footer,
+    .action-buttons {
+        display: none;
+    }
+    
+    .student-table {
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+    
+    .student-table thead {
+        background: #f0f0f0;
+        color: black;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}
+
+/* ===== CUSTOM SCROLLBAR ===== */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--light-bg);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #3a56d4 100%);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #3a56d4 0%, var(--primary-color) 100%);
+}
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Header Section -->
+    <div class="header">
+        <h2>
+            <i class="fas fa-graduation-cap"></i>
+            Student Management
+        </h2>
+        <div class="header-actions">
+            <a href="{% url 'students_list' %}" class="btn btn-add">
+                <i class="fas fa-plus-circle"></i>
+                Add New Student
+            </a>
+        </div>
+    </div>
+
+    <!-- Optional Search Bar (you can add this) -->
+    <div style="padding: 20px 30px 0 30px;">
+        <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search students by name, email or contact...">
+        </div>
+    </div>
+
+    <!-- Table Container -->
+    <div class="table-container">
+        <table class="student-table">
+            <thead>
+                <tr>
+                    <th>Sr.No</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Email</th>
+                    <th>Contact</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if students %}
+                    {% for i in students %}
+                    <tr>
+                        <td>
+                            <span class="sr-badge">{{ forloop.counter }}</span>
+                        </td>
+                        <td>
+                            <div class="student-name">
+                                <i class="fas fa-user-circle"></i>
+                                {{ i.name }}
+                            </div>
+                        </td>
+                        <td>
+                            <span class="student-age">
+                                <i class="fas fa-calendar-alt"></i>
+                                {{ i.age }} years
+                            </span>
+                        </td>
+                        <td>
+                            <div class="student-email">
+                                <i class="fas fa-envelope"></i>
+                                {{ i.email }}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="student-contact">
+                                <i class="fas fa-phone-alt"></i>
+                                {{ i.contact }}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <a href="edit" class="btn-edit">
+                                    <i class="fas fa-edit"></i> Edit
+                                </a>
+                                <a href="delete" class="btn-delete" onclick="return confirm('Are you sure you want to delete this student?')">
+                                    <i class="fas fa-trash-alt"></i> Delete
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="6" class="no-students">
+                            <div class="empty-state">
+                                <i class="fas fa-user-graduate"></i>
+                                <p>No Students Found</p>
+                                <a href="{% url 'students_list' %}" class="btn btn-primary">
+                                    <i class="fas fa-plus-circle"></i>
+                                    Add Your First Student
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Table Footer -->
+    <div class="table-footer">
+        <div class="student-count">
+            <i class="fas fa-users"></i>
+            Total Students: <span>{{ students|length|default:"0" }}</span>
+        </div>
+        <!-- Optional Pagination -->
+        <ul class="pagination">
+            <li class="page-item"><a href="#" class="page-link active">1</a></li>
+            <li class="page-item"><a href="#" class="page-link">2</a></li>
+            <li class="page-item"><a href="#" class="page-link">3</a></li>
+            <li class="page-item"><a href="#" class="page-link">4</a></li>
+            <li class="page-item"><a href="#" class="page-link">5</a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- Optional JavaScript for confirmation dialogs -->
+<script>
+    // Add confirmation before delete
+    document.querySelectorAll('.btn-delete').forEach(button => {
+        button.addEventListener('click', function(e) {
+            if (!confirm('Are you sure you want to delete this student?')) {
+                e.preventDefault();
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
